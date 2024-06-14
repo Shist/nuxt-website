@@ -6,6 +6,12 @@
       <div class="header__controls-wrapper">
         <NuxtLink to="#section-1" class="header__btn">Section 1</NuxtLink>
         <NuxtLink to="#section-2" class="header__btn">Section 2</NuxtLink>
+        <select name="language" id="pet-select">
+          <option value="EN">EN</option>
+          <option value="RU">RU</option>
+          <option value="DE">DE</option>
+          <option value="ZH">ZH</option>
+        </select>
       </div>
     </header>
     <main class="main">
