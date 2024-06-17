@@ -4,8 +4,12 @@
     <header class="header">
       <h1 class="header__headline">{{ headlineData[selectedLang] }}</h1>
       <div class="header__controls-wrapper">
-        <NuxtLink to="#section-1" class="header__btn">Section 1</NuxtLink>
-        <NuxtLink to="#section-2" class="header__btn">Section 2</NuxtLink>
+        <NuxtLink to="#section-1" class="header__btn">{{
+          buttonsData[selectedLang]["button-1"]
+        }}</NuxtLink>
+        <NuxtLink to="#section-2" class="header__btn">{{
+          buttonsData[selectedLang]["button-2"]
+        }}</NuxtLink>
         <select v-model="selectedLang" name="language" id="lang-select">
           <option value="EN">EN</option>
           <option value="RU">RU</option>
@@ -22,6 +26,7 @@
 
 <script setup lang="ts">
 import headlineData from "@/data/headline-data.json";
+import buttonsData from "@/data/buttons-data.json";
 import { type Language, isLanguage } from "@/types/languages";
 
 const selectedLang = useState<Language>("lang", () => "EN");
