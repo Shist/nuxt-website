@@ -3,7 +3,7 @@
     <section class="main-page__section" id="section-1">
       <h2
         class="main-page__section-headline"
-        contentEditable
+        contentEditable="true"
         @input="handleFirstSectionChange"
       >
         {{ sections[selectedLang]["section-1"] }}
@@ -11,7 +11,7 @@
       <p
         v-for="(paragraph, index) in text[selectedLang]['section-1']"
         class="main-page__section-paragraph"
-        contentEditable
+        contentEditable="true"
         @input="(e) => handleParagraphChange(e, 1, index)"
       >
         {{ paragraph }}
@@ -20,7 +20,7 @@
     <section class="main-page__section" id="section-2">
       <h2
         class="main-page__section-headline"
-        contentEditable
+        contentEditable="true"
         @input="handleSecondSectionChange"
       >
         {{ sections[selectedLang]["section-2"] }}
@@ -28,7 +28,7 @@
       <p
         v-for="(paragraph, index) in text[selectedLang]['section-2']"
         class="main-page__section-paragraph"
-        contentEditable
+        contentEditable="true"
         @input="(e) => handleParagraphChange(e, 2, index)"
       >
         {{ paragraph }}

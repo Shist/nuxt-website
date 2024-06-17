@@ -2,8 +2,8 @@ import { USER_URL } from "@/constants/urls";
 import { type IUser, type IUserName, isUserName } from "@/types/user";
 
 export default function useLoadUser() {
-  const isUserLoading = ref(true);
   const userInitials = ref("");
+  const isError = ref(false);
 
   const fetchUser = async () => {
     const { data: userName } = await useFetch(USER_URL, {
@@ -16,14 +16,15 @@ export default function useLoadUser() {
     });
 
     if (isUserName(userName.value)) {
-      isUserLoading.value = false;
       userInitials.value = `${userName.value.last_name[0]}${userName.value.first_name[0]}`;
+    } else {
+      isError.value = true;
     }
   };
 
   return {
-    isUserLoading,
-    userInitials,
     fetchUser,
+    userInitials,
+    isError,
   };
 }

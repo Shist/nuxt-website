@@ -5,7 +5,7 @@
     <header class="header">
       <h1
         class="header__headline"
-        contentEditable
+        contentEditable="true"
         @input="handleHeadlineChange"
       >
         {{ headlines[selectedLang] }}
@@ -14,19 +14,24 @@
         <NuxtLink
           to="#section-1"
           class="header__btn"
-          contentEditable
+          contentEditable="true"
           @input="handleFirstBtnChange"
           >{{ sections[selectedLang]["section-1"] }}</NuxtLink
         >
         <NuxtLink
           to="#section-2"
           class="header__btn"
-          contentEditable
+          contentEditable="true"
           @input="handleSecondBtnChange"
           >{{ sections[selectedLang]["section-2"] }}</NuxtLink
         >
-        <div v-if="isUserLoading" class="header__icon-preload"></div>
-        <div v-else class="header__icon-wrapper">
+        <div
+          v-if="isError"
+          class="header__icon-wrapper header__icon-wrapper_error"
+        >
+          <span class="header__icon-error">Error</span>
+        </div>
+        <div v-else class="header__icon-wrapper header__icon-wrapper_success">
           <span class="header__icon-text">{{ userInitials }}</span>
         </div>
         <select v-model="selectedLang" name="language" id="lang-select">
@@ -56,9 +61,9 @@ import useLoadUser from "@/composables/useLoadUser";
 
 const isLoading = ref(true);
 
-const { isUserLoading, userInitials, fetchUser } = useLoadUser();
+const { fetchUser, userInitials, isError } = useLoadUser();
 
-fetchUser();
+await fetchUser();
 
 const selectedLang = useState<Language>("lang", () => "EN");
 const headlines = useState<IHeadlinesData>("headlines", () => headlinesData);
@@ -133,25 +138,34 @@ const handleSecondBtnChange = (event: Event) => {
     @media (max-width: $tablet-l) {
       display: none;
     }
-    .header__icon-preload {
-      @include sample(50px, 50px, 100%);
-    }
     .header__icon-wrapper {
       display: flex;
       justify-content: center;
       align-items: center;
       width: 50px;
       height: 50px;
-      background-color: $color-white;
       border-radius: 100%;
       border: 2px solid $color-black;
-    }
-    .header__icon-text {
-      font-family: "Roboto";
-      font-weight: 700;
-      font-size: 24px;
-      line-height: 24px;
-      color: $color-black;
+      &_success {
+        background-color: $color-white;
+      }
+      &_error {
+        background-color: $color-light-red;
+      }
+      .header__icon-text {
+        font-family: "Roboto";
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 24px;
+        color: $color-black;
+      }
+      .header__icon-error {
+        font-family: "Roboto";
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 14px;
+        color: $color-red;
+      }
     }
   }
 }
