@@ -22,9 +22,20 @@
 
 <script setup lang="ts">
 import headlineData from "@/data/headline-data.json";
-import { type Language } from "@/types/languages";
+import { type Language, isLanguage } from "@/types/languages";
 
 const selectedLang = useState<Language>("lang", () => "EN");
+
+onMounted(() => {
+  const langFromLocalStorage = localStorage.getItem("lang");
+  if (isLanguage(langFromLocalStorage)) {
+    selectedLang.value = langFromLocalStorage;
+  }
+});
+
+watch(selectedLang, (newLang) => {
+  localStorage.setItem("lang", newLang);
+});
 </script>
 
 <style lang="scss">
