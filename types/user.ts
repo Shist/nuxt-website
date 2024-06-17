@@ -6,13 +6,17 @@ export interface IUser {
   avatar: string;
 }
 
-export type IUserName = Pick<IUser, "first_name" | "last_name">;
+export type IUserIconData = Pick<IUser, "first_name" | "last_name" | "avatar">;
 
-export function isUserName(value: unknown): value is IUserName {
+export function isUserIconData(value: unknown): value is IUserIconData {
   return (
     typeof value === "object" &&
     value !== null &&
     "first_name" in value &&
-    "last_name" in value
+    typeof value.first_name === "string" &&
+    "last_name" in value &&
+    typeof value.last_name === "string" &&
+    "avatar" in value &&
+    typeof value.avatar === "string"
   );
 }

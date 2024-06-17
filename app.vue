@@ -26,14 +26,30 @@
           >{{ sections[selectedLang]["section-2"] }}</NuxtLink
         >
         <div
-          v-if="isError"
-          class="header__icon-wrapper header__icon-wrapper_error"
+          v-show="!isImgNeeded"
+          class="header__initials-wrapper"
+          @click="isImgNeeded = true"
         >
-          <span class="header__icon-error">Error</span>
+          <div
+            v-if="isError"
+            class="header__initials-wrapper header__initials-wrapper_error"
+          >
+            <span class="header__initials-error">Error</span>
+          </div>
+          <div
+            v-else
+            class="header__initials-wrapper header__initials-wrapper_success"
+          >
+            <span class="header__initials-text">{{ userInitials }}</span>
+          </div>
         </div>
-        <div v-else class="header__icon-wrapper header__icon-wrapper_success">
-          <span class="header__icon-text">{{ userInitials }}</span>
-        </div>
+        <img
+          v-show="isImgNeeded"
+          :src="userAvatarSrc"
+          alt="user avatar"
+          class="header__icon-img"
+          @click="isImgNeeded = false"
+        />
         <select v-model="selectedLang" name="language" id="lang-select">
           <option value="EN">EN</option>
           <option value="RU">RU</option>
@@ -61,7 +77,9 @@ import useLoadUser from "@/composables/useLoadUser";
 
 const isLoading = ref(true);
 
-const { fetchUser, userInitials, isError } = useLoadUser();
+const isImgNeeded = ref(false);
+
+const { fetchUser, userInitials, userAvatarSrc, isError } = useLoadUser();
 
 await fetchUser();
 
@@ -138,34 +156,44 @@ const handleSecondBtnChange = (event: Event) => {
     @media (max-width: $tablet-l) {
       display: none;
     }
-    .header__icon-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    .header__initials-wrapper {
+      cursor: pointer;
+      .header__initials-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 2px solid $color-black;
+        &_success {
+          background-color: $color-white;
+        }
+        &_error {
+          background-color: $color-light-red;
+        }
+        .header__initials-text {
+          font-family: "Roboto";
+          font-weight: 700;
+          font-size: 24px;
+          line-height: 24px;
+          color: $color-black;
+        }
+        .header__initials-error {
+          font-family: "Roboto";
+          font-weight: 700;
+          font-size: 14px;
+          line-height: 14px;
+          color: $color-red;
+        }
+      }
+    }
+    .header__icon-img {
       width: 50px;
       height: 50px;
-      border-radius: 100%;
+      border-radius: 50%;
       border: 2px solid $color-black;
-      &_success {
-        background-color: $color-white;
-      }
-      &_error {
-        background-color: $color-light-red;
-      }
-      .header__icon-text {
-        font-family: "Roboto";
-        font-weight: 700;
-        font-size: 24px;
-        line-height: 24px;
-        color: $color-black;
-      }
-      .header__icon-error {
-        font-family: "Roboto";
-        font-weight: 700;
-        font-size: 14px;
-        line-height: 14px;
-        color: $color-red;
-      }
+      cursor: pointer;
     }
   }
 }
