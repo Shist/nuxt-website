@@ -43,72 +43,51 @@
 import headlinesData from "@/data/headline-data.json";
 import sectionsData from "@/data/sections-data.json";
 import textData from "@/data/text-data.json";
-import { type IHeadlinesData, isHeadlinesData } from "@/types/headlines";
-import { type ISectionsData, isSectionsData } from "@/types/sections";
-import { type ITextData, isTextData } from "@/types/text";
-import { type Language, isLanguage } from "@/types/languages";
+import { type IHeadlinesData } from "@/types/headlines";
+import { type ISectionsData } from "@/types/sections";
+import { type ITextData } from "@/types/text";
+import { type Language } from "@/types/languages";
+import useLocalStorage from "@/composables/useLocalStorage";
 
 const isLoading = ref(true);
 
 const selectedLang = useState<Language>("lang", () => "EN");
 const headlines = useState<IHeadlinesData>("headlines", () => headlinesData);
 const sections = useState<ISectionsData>("sections", () => sectionsData);
-const text = useState<ITextData>("text", () => textData);
+useState<ITextData>("text", () => textData);
 
 onMounted(() => {
   isLoading.value = false;
 
-  const langFromLocalStorage = localStorage.getItem("lang");
-  if (isLanguage(langFromLocalStorage)) {
-    selectedLang.value = langFromLocalStorage;
-  }
+  const {
+    setLangToState,
+    setHeadlinesToState,
+    setSectionsToState,
+    setTextToState,
+  } = useLocalStorage();
 
-  const headlinesFromLocalStorage = localStorage.getItem("headlines");
-  if (headlinesFromLocalStorage) {
-    const parsedHeadlines = JSON.parse(headlinesFromLocalStorage);
-    if (isHeadlinesData(parsedHeadlines)) {
-      headlines.value = parsedHeadlines;
-    }
-  }
-
-  const sectionsFromLocalStorage = localStorage.getItem("sections");
-  if (sectionsFromLocalStorage) {
-    const parsedSections = JSON.parse(sectionsFromLocalStorage);
-    if (isSectionsData(parsedSections)) {
-      sections.value = parsedSections;
-    }
-  }
-
-  const textFromLocalStorage = localStorage.getItem("text");
-  if (textFromLocalStorage) {
-    const parsedText = JSON.parse(textFromLocalStorage);
-    if (isTextData(parsedText)) {
-      text.value = parsedText;
-    }
-  }
+  setLangToState();
+  setHeadlinesToState();
+  setSectionsToState();
+  setTextToState();
 });
 
+const { saveLang, saveHeadlines, saveSections } = useLocalStorage();
+
 watch(selectedLang, (newLang) => {
-  localStorage.setItem("lang", newLang);
+  saveLang(newLang);
 });
 
 const handleHeadlineChange = (event: Event) => {
-  headlines.value[selectedLang.value] = (event.target as HTMLElement).innerText;
-  localStorage.setItem("headlines", JSON.stringify(headlines.value));
+  saveHeadlines((event.target as HTMLElement).innerText);
 };
 
 const handleFirstBtnChange = (event: Event) => {
-  sections.value[selectedLang.value]["section-1"] = (
-    event.target as HTMLElement
-  ).innerText;
-  localStorage.setItem("sections", JSON.stringify(sections.value));
+  saveSections((event.target as HTMLElement).innerText, 1);
 };
 
 const handleSecondBtnChange = (event: Event) => {
-  sections.value[selectedLang.value]["section-2"] = (
-    event.target as HTMLElement
-  ).innerText;
-  localStorage.setItem("sections", JSON.stringify(sections.value));
+  saveSections((event.target as HTMLElement).innerText, 2);
 };
 </script>
 

@@ -46,18 +46,14 @@ const selectedLang = useState<Language>("lang");
 const sections = useState<ISectionsData>("sections");
 const text = useState<ITextData>("text");
 
+const { saveSections, saveText } = useLocalStorage();
+
 const handleFirstSectionChange = (event: Event) => {
-  sections.value[selectedLang.value]["section-1"] = (
-    event.target as HTMLElement
-  ).innerText;
-  localStorage.setItem("sections", JSON.stringify(sections.value));
+  saveSections((event.target as HTMLElement).innerText, 1);
 };
 
 const handleSecondSectionChange = (event: Event) => {
-  sections.value[selectedLang.value]["section-2"] = (
-    event.target as HTMLElement
-  ).innerText;
-  localStorage.setItem("sections", JSON.stringify(sections.value));
+  saveSections((event.target as HTMLElement).innerText, 2);
 };
 
 const handleParagraphChange = (
@@ -65,10 +61,7 @@ const handleParagraphChange = (
   sectionNum: 1 | 2,
   paragraphIndex: number
 ) => {
-  text.value[selectedLang.value][`section-${sectionNum}`][paragraphIndex] = (
-    event.target as HTMLElement
-  ).innerText;
-  localStorage.setItem("text", JSON.stringify(text.value));
+  saveText((event.target as HTMLElement).innerText, sectionNum, paragraphIndex);
 };
 </script>
 
