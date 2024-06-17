@@ -1,6 +1,7 @@
 <template>
   <div class="global-container">
     <NuxtRouteAnnouncer />
+    <Spinner v-if="isLoading" />
     <header class="header">
       <h1
         class="header__headline"
@@ -47,12 +48,16 @@ import { type ISectionsData, isSectionsData } from "@/types/sections";
 import { type ITextData, isTextData } from "@/types/text";
 import { type Language, isLanguage } from "@/types/languages";
 
+const isLoading = ref(true);
+
 const selectedLang = useState<Language>("lang", () => "EN");
 const headlines = useState<IHeadlinesData>("headlines", () => headlinesData);
 const sections = useState<ISectionsData>("sections", () => sectionsData);
 const text = useState<ITextData>("text", () => textData);
 
 onMounted(() => {
+  isLoading.value = false;
+
   const langFromLocalStorage = localStorage.getItem("lang");
   if (isLanguage(langFromLocalStorage)) {
     selectedLang.value = langFromLocalStorage;
