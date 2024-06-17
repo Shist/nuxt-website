@@ -45,3 +45,26 @@
     cursor: default;
   }
 }
+
+// Simple pulse animation for @sample mixin
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+// This mixin is needed for those gray blocks that appearing while some data is fetching
+@mixin sample($width, $height, $border-radius) {
+  width: $width;
+  height: $height;
+  background-color: $color-preload;
+  border-radius: $border-radius;
+  border: 2px solid $color-black;
+  animation: pulse 1.5s ease-in-out 0.5s infinite;
+}

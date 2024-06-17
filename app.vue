@@ -25,6 +25,10 @@
           @input="handleSecondBtnChange"
           >{{ sections[selectedLang]["section-2"] }}</NuxtLink
         >
+        <div v-if="isUserLoading" class="header__icon-preload"></div>
+        <div v-else class="header__icon-wrapper">
+          <span class="header__icon-text">{{ userInitials }}</span>
+        </div>
         <select v-model="selectedLang" name="language" id="lang-select">
           <option value="EN">EN</option>
           <option value="RU">RU</option>
@@ -48,8 +52,13 @@ import { type ISectionsData } from "@/types/sections";
 import { type ITextData } from "@/types/text";
 import { type Language } from "@/types/languages";
 import useLocalStorage from "@/composables/useLocalStorage";
+import useLoadUser from "@/composables/useLoadUser";
 
 const isLoading = ref(true);
+
+const { isUserLoading, userInitials, fetchUser } = useLoadUser();
+
+fetchUser();
 
 const selectedLang = useState<Language>("lang", () => "EN");
 const headlines = useState<IHeadlinesData>("headlines", () => headlinesData);
@@ -123,6 +132,26 @@ const handleSecondBtnChange = (event: Event) => {
     }
     @media (max-width: $tablet-l) {
       display: none;
+    }
+    .header__icon-preload {
+      @include sample(50px, 50px, 100%);
+    }
+    .header__icon-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 50px;
+      height: 50px;
+      background-color: $color-white;
+      border-radius: 100%;
+      border: 2px solid $color-black;
+    }
+    .header__icon-text {
+      font-family: "Roboto";
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 24px;
+      color: $color-black;
     }
   }
 }
