@@ -4,7 +4,7 @@
       <h2
         class="main-page__section-headline"
         contentEditable="true"
-        @input="handleFirstSectionChange"
+        @input="(e) => handleSectionChange(e, 1)"
       >
         {{ sections[selectedLang]["section-1"] }}
       </h2>
@@ -21,7 +21,7 @@
       <h2
         class="main-page__section-headline"
         contentEditable="true"
-        @input="handleSecondSectionChange"
+        @input="(e) => handleSectionChange(e, 2)"
       >
         {{ sections[selectedLang]["section-2"] }}
       </h2>
@@ -48,12 +48,8 @@ const text = useState<ITextData>("text");
 
 const { saveSections, saveText } = useLocalStorage();
 
-const handleFirstSectionChange = (event: Event) => {
-  saveSections((event.target as HTMLElement).innerText, 1);
-};
-
-const handleSecondSectionChange = (event: Event) => {
-  saveSections((event.target as HTMLElement).innerText, 2);
+const handleSectionChange = (event: Event, sectionNum: 1 | 2) => {
+  saveSections((event.target as HTMLElement).innerText, sectionNum);
 };
 
 const handleParagraphChange = (
