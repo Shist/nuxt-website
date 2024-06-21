@@ -15,14 +15,14 @@
           to="#section-1"
           class="header__btn"
           contentEditable="true"
-          @input="handleFirstBtnChange"
+          @input="(e) => handleBtnChange(e, 1)"
           >{{ sections[selectedLang]["section-1"] }}</NuxtLink
         >
         <NuxtLink
           to="#section-2"
           class="header__btn"
           contentEditable="true"
-          @input="handleSecondBtnChange"
+          @input="(e) => handleBtnChange(e, 2)"
           >{{ sections[selectedLang]["section-2"] }}</NuxtLink
         >
         <div
@@ -114,12 +114,8 @@ const handleHeadlineChange = (event: Event) => {
   saveHeadlines((event.target as HTMLElement).innerText);
 };
 
-const handleFirstBtnChange = (event: Event) => {
-  saveSections((event.target as HTMLElement).innerText, 1);
-};
-
-const handleSecondBtnChange = (event: Event) => {
-  saveSections((event.target as HTMLElement).innerText, 2);
+const handleBtnChange = (event: Event, btnNum: 1 | 2) => {
+  saveSections((event.target as HTMLElement).innerText, btnNum);
 };
 </script>
 
