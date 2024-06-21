@@ -14,7 +14,9 @@
 
 ---
 
-### This project will be probably hosted using the Vecel.com platform when it will be approved and moved to master branch.
+### This project is hosted using the Vecel.com platform, you can see how it works here:
+
+## https://nuxt-website-sandy.vercel.app/
 
 ---
 
@@ -36,6 +38,7 @@ https://github.com/Shist/nuxt-website/assets/40572268/d2b9be55-e7ee-4ba3-8987-63
    `npm install`
 1. Run the app (by default on 'http://localhost:3000/') using:
    `npm run dev`
+
 ---
 
 ## Description of folder structure
@@ -69,5 +72,3 @@ https://github.com/Shist/nuxt-website/assets/40572268/d2b9be55-e7ee-4ba3-8987-63
   - Fetch API (useFetch, $fetch, useAsyncData)
 - localStorage
 - Imports / Exports
-
-
