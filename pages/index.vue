@@ -6,15 +6,14 @@
         contentEditable="true"
         @input="(e) => handleSectionChange(e, 1)"
       >
-        {{ sections[selectedLang]["section-1"] }}
+        {{ langsData[selectedLang]["section-1"].headline }}
       </h2>
       <p
-        v-for="(paragraph, index) in text[selectedLang]['section-1']"
         class="main-page__section-paragraph"
         contentEditable="true"
-        @input="(e) => handleParagraphChange(e, 1, index)"
+        @input="(e) => handleTextChange(e, 1)"
       >
-        {{ paragraph }}
+        {{ langsData[selectedLang]["section-1"].text }}
       </p>
     </section>
     <section class="main-page__section" id="section-2">
@@ -23,41 +22,35 @@
         contentEditable="true"
         @input="(e) => handleSectionChange(e, 2)"
       >
-        {{ sections[selectedLang]["section-2"] }}
+        {{ langsData[selectedLang]["section-2"].headline }}
       </h2>
       <p
-        v-for="(paragraph, index) in text[selectedLang]['section-2']"
         class="main-page__section-paragraph"
         contentEditable="true"
-        @input="(e) => handleParagraphChange(e, 2, index)"
+        @input="(e) => handleTextChange(e, 2)"
       >
-        {{ paragraph }}
+        {{ langsData[selectedLang]["section-2"].text }}
       </p>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { type ISectionsData } from "@/types/sections";
-import { type ITextData } from "@/types/text";
 import { type Language } from "@/types/languages";
+import { type LangsData } from "@/types/langsData";
+import langsDataObj from "@/locales";
 
-const selectedLang = useState<Language>("lang");
-const sections = useState<ISectionsData>("sections");
-const text = useState<ITextData>("text");
+const selectedLang = useState<Language>("lang", () => "EN");
+const langsData = useState<LangsData>("langsData", () => langsDataObj);
 
-const { saveSections, saveText } = useLocalStorage();
+const { saveSectionHeadline, saveSectionText } = useLocalStorage();
 
 const handleSectionChange = (event: Event, sectionNum: 1 | 2) => {
-  saveSections((event.target as HTMLElement).innerText, sectionNum);
+  saveSectionHeadline((event.target as HTMLElement).innerText, sectionNum);
 };
 
-const handleParagraphChange = (
-  event: Event,
-  sectionNum: 1 | 2,
-  paragraphIndex: number
-) => {
-  saveText((event.target as HTMLElement).innerText, sectionNum, paragraphIndex);
+const handleTextChange = (event: Event, sectionNum: 1 | 2) => {
+  saveSectionText((event.target as HTMLElement).innerText, sectionNum);
 };
 </script>
 

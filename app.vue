@@ -8,7 +8,7 @@
         contentEditable="true"
         @input="handleHeadlineChange"
       >
-        {{ headlines[selectedLang] }}
+        {{ langsData[selectedLang].headline }}
       </h1>
       <div class="header__controls-wrapper">
         <NuxtLink
@@ -16,14 +16,14 @@
           class="header__btn"
           contentEditable="true"
           @input="(e) => handleBtnChange(e, 1)"
-          >{{ sections[selectedLang]["section-1"] }}</NuxtLink
+          >{{ langsData[selectedLang]["section-1"].headline }}</NuxtLink
         >
         <NuxtLink
           to="#section-2"
           class="header__btn"
           contentEditable="true"
           @input="(e) => handleBtnChange(e, 2)"
-          >{{ sections[selectedLang]["section-2"] }}</NuxtLink
+          >{{ langsData[selectedLang]["section-2"].headline }}</NuxtLink
         >
         <div
           v-show="!isImgNeeded"
@@ -65,13 +65,9 @@
 </template>
 
 <script setup lang="ts">
-import headlinesData from "@/data/headline-data.json";
-import sectionsData from "@/data/sections-data.json";
-import textData from "@/data/text-data.json";
-import { type IHeadlinesData } from "@/types/headlines";
-import { type ISectionsData } from "@/types/sections";
-import { type ITextData } from "@/types/text";
 import { type Language } from "@/types/languages";
+import { type LangsData } from "@/types/langsData";
+import langsDataObj from "@/locales";
 import useLocalStorage from "@/composables/useLocalStorage";
 import useLoadUser from "@/composables/useLoadUser";
 
@@ -84,38 +80,29 @@ const { fetchUser, userInitials, userAvatarSrc, isError } = useLoadUser();
 await fetchUser();
 
 const selectedLang = useState<Language>("lang", () => "EN");
-const headlines = useState<IHeadlinesData>("headlines", () => headlinesData);
-const sections = useState<ISectionsData>("sections", () => sectionsData);
-useState<ITextData>("text", () => textData);
+const langsData = useState<LangsData>("langsData", () => langsDataObj);
 
 onMounted(() => {
   isLoading.value = false;
 
-  const {
-    setLangToState,
-    setHeadlinesToState,
-    setSectionsToState,
-    setTextToState,
-  } = useLocalStorage();
+  const { setLangToState, setLangsDataToState } = useLocalStorage();
 
   setLangToState();
-  setHeadlinesToState();
-  setSectionsToState();
-  setTextToState();
+  setLangsDataToState();
 });
 
-const { saveLang, saveHeadlines, saveSections } = useLocalStorage();
+const { saveLang, saveHeadline, saveSectionHeadline } = useLocalStorage();
 
 watch(selectedLang, (newLang) => {
   saveLang(newLang);
 });
 
 const handleHeadlineChange = (event: Event) => {
-  saveHeadlines((event.target as HTMLElement).innerText);
+  saveHeadline((event.target as HTMLElement).innerText);
 };
 
 const handleBtnChange = (event: Event, btnNum: 1 | 2) => {
-  saveSections((event.target as HTMLElement).innerText, btnNum);
+  saveSectionHeadline((event.target as HTMLElement).innerText, btnNum);
 };
 </script>
 

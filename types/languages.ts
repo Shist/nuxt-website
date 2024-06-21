@@ -1,5 +1,3 @@
-export type Language = "EN" | "RU" | "DE" | "ZH";
+import langsDataObj from "@/locales";
 
-export function isLanguage(value: unknown): value is Language {
-  return ["EN", "RU", "DE", "ZH"].includes(value as string);
-}
+export type Language = keyof typeof langsDataObj;

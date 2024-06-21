@@ -1,5 +1,5 @@
 import { USER_URL } from "@/constants/urls";
-import { type IUser, type IUserIconData, isUserIconData } from "@/types/user";
+import { type IUser, type IUserIconData } from "@/types/user";
 
 export default function useLoadUser() {
   const userInitials = ref("");
@@ -17,7 +17,7 @@ export default function useLoadUser() {
       },
     });
 
-    if (isUserIconData(userIconData.value)) {
+    if (userIconData.value) {
       userInitials.value = `${userIconData.value.last_name[0]}${userIconData.value.first_name[0]}`;
       userAvatarSrc.value = userIconData.value.avatar;
     } else {
