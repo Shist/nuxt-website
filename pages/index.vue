@@ -6,14 +6,14 @@
         contentEditable="true"
         @input="(e) => handleSectionChange(e, 1)"
       >
-        {{ langsData[selectedLang]["section-1"].headline }}
+        {{ firstSectionHeadline[selectedLang] }}
       </h2>
       <p
         class="main-page__section-paragraph"
         contentEditable="true"
         @input="(e) => handleTextChange(e, 1)"
       >
-        {{ langsData[selectedLang]["section-1"].text }}
+        {{ firstSectionText[selectedLang] }}
       </p>
     </section>
     <section class="main-page__section" id="section-2">
@@ -22,26 +22,45 @@
         contentEditable="true"
         @input="(e) => handleSectionChange(e, 2)"
       >
-        {{ langsData[selectedLang]["section-2"].headline }}
+        {{ secondSectionHeadline[selectedLang] }}
       </h2>
       <p
         class="main-page__section-paragraph"
         contentEditable="true"
         @input="(e) => handleTextChange(e, 2)"
       >
-        {{ langsData[selectedLang]["section-2"].text }}
+        {{ secondSectionText[selectedLang] }}
       </p>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { type Language } from "@/types/languages";
-import { type LangsData } from "@/types/langsData";
-import langsDataObj from "@/locales";
+import { type Language, type TextDataField } from "@/types/text";
+import {
+  firstSectionHeadlineData,
+  firstSectionTextData,
+  secondSectionHeadlineData,
+  secondSectionTextData,
+} from "@/locales";
 
 const selectedLang = useState<Language>("lang", () => "EN");
-const langsData = useState<LangsData>("langsData", () => langsDataObj);
+const firstSectionHeadline = useState<TextDataField>(
+  "firstSectionHeadline",
+  () => firstSectionHeadlineData
+);
+const firstSectionText = useState<TextDataField>(
+  "firstSectionText",
+  () => firstSectionTextData
+);
+const secondSectionHeadline = useState<TextDataField>(
+  "secondSectionHeadline",
+  () => secondSectionHeadlineData
+);
+const secondSectionText = useState<TextDataField>(
+  "secondSectionText",
+  () => secondSectionTextData
+);
 
 const { saveSectionHeadline, saveSectionText } = useLocalStorage();
 

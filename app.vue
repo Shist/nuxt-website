@@ -6,9 +6,9 @@
       <h1
         class="header__headline"
         contentEditable="true"
-        @input="handleHeadlineChange"
+        @input="handlePageHeadlineChange"
       >
-        {{ langsData[selectedLang].headline }}
+        {{ pageHeadline[selectedLang] }}
       </h1>
       <div class="header__controls-wrapper">
         <NuxtLink
@@ -16,14 +16,14 @@
           class="header__btn"
           contentEditable="true"
           @input="(e) => handleBtnChange(e, 1)"
-          >{{ langsData[selectedLang]["section-1"].headline }}</NuxtLink
+          >{{ firstSectionHeadline[selectedLang] }}</NuxtLink
         >
         <NuxtLink
           to="#section-2"
           class="header__btn"
           contentEditable="true"
           @input="(e) => handleBtnChange(e, 2)"
-          >{{ langsData[selectedLang]["section-2"].headline }}</NuxtLink
+          >{{ secondSectionHeadline[selectedLang] }}</NuxtLink
         >
         <div
           v-show="!isImgNeeded"
@@ -65,9 +65,12 @@
 </template>
 
 <script setup lang="ts">
-import { type Language } from "@/types/languages";
-import { type LangsData } from "@/types/langsData";
-import langsDataObj from "@/locales";
+import { type Language, type TextDataField } from "@/types/text";
+import {
+  pageHeadlineData,
+  firstSectionHeadlineData,
+  secondSectionHeadlineData,
+} from "@/locales";
 import useLocalStorage from "@/composables/useLocalStorage";
 import useLoadUser from "@/composables/useLoadUser";
 
@@ -80,25 +83,35 @@ const { fetchUser, userInitials, userAvatarSrc, isError } = useLoadUser();
 await fetchUser();
 
 const selectedLang = useState<Language>("lang", () => "EN");
-const langsData = useState<LangsData>("langsData", () => langsDataObj);
+const pageHeadline = useState<TextDataField>(
+  "pageHeadline",
+  () => pageHeadlineData
+);
+const firstSectionHeadline = useState<TextDataField>(
+  "firstSectionHeadline",
+  () => firstSectionHeadlineData
+);
+const secondSectionHeadline = useState<TextDataField>(
+  "secondSectionHeadline",
+  () => secondSectionHeadlineData
+);
 
 onMounted(() => {
   isLoading.value = false;
 
-  const { setLangToState, setLangsDataToState } = useLocalStorage();
+  const { setLocalDataToState } = useLocalStorage();
 
-  setLangToState();
-  setLangsDataToState();
+  setLocalDataToState();
 });
 
-const { saveLang, saveHeadline, saveSectionHeadline } = useLocalStorage();
+const { saveLang, savePageHeadline, saveSectionHeadline } = useLocalStorage();
 
 watch(selectedLang, (newLang) => {
   saveLang(newLang);
 });
 
-const handleHeadlineChange = (event: Event) => {
-  saveHeadline((event.target as HTMLElement).innerText);
+const handlePageHeadlineChange = (event: Event) => {
+  savePageHeadline((event.target as HTMLElement).innerText);
 };
 
 const handleBtnChange = (event: Event, btnNum: 1 | 2) => {

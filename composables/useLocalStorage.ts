@@ -1,55 +1,102 @@
-import langsDataObj from "@/locales";
-import { type LangsData } from "@/types/langsData";
-import { type Language } from "@/types/languages";
+import { type Language, type TextDataField } from "@/types/text";
+import {
+  pageHeadlineData,
+  firstSectionHeadlineData,
+  firstSectionTextData,
+  secondSectionHeadlineData,
+  secondSectionTextData,
+} from "@/locales";
 
 export default function useLocalStorage() {
   const selectedLang = useState<Language>("lang", () => "EN");
-  const langsData = useState<LangsData>("langsData", () => langsDataObj);
+  const pageHeadline = useState<TextDataField>(
+    "pageHeadline",
+    () => pageHeadlineData
+  );
+  const firstSectionHeadline = useState<TextDataField>(
+    "firstSectionHeadline",
+    () => firstSectionHeadlineData
+  );
+  const firstSectionText = useState<TextDataField>(
+    "firstSectionText",
+    () => firstSectionTextData
+  );
+  const secondSectionHeadline = useState<TextDataField>(
+    "secondSectionHeadline",
+    () => secondSectionHeadlineData
+  );
+  const secondSectionText = useState<TextDataField>(
+    "secondSectionText",
+    () => secondSectionTextData
+  );
 
-  const setLangToState = () => {
-    const langFromLocalStorage = localStorage.getItem("lang");
-    if (langFromLocalStorage) {
-      selectedLang.value = langFromLocalStorage as Language;
-    }
-  };
+  const setLocalDataToState = () => {
+    [
+      "lang",
+      "pageHeadline",
+      "firstSectionHeadline",
+      "firstSectionText",
+      "secondSectionHeadline",
+      "secondSectionText",
+    ].forEach((field) => {
+      const fieldFromLocalStorage = localStorage.getItem(field);
 
-  const setLangsDataToState = () => {
-    const langsDataFromLocalStorage = localStorage.getItem("langsData");
-    if (langsDataFromLocalStorage) {
-      const parsedLangsData = JSON.parse(langsDataFromLocalStorage);
-      langsData.value = parsedLangsData;
-    }
+      if (fieldFromLocalStorage) {
+        const fieldState = useState<Language | TextDataField>(field);
+
+        fieldState.value = JSON.parse(fieldFromLocalStorage);
+      }
+    });
   };
 
   const saveLang = (newLang: string) => {
-    localStorage.setItem("lang", newLang);
+    localStorage.setItem("lang", JSON.stringify(newLang));
   };
 
-  const saveHeadline = (newHeadline: string) => {
-    langsData.value[selectedLang.value].headline = newHeadline;
-    localStorage.setItem("langsData", JSON.stringify(langsData.value));
+  const savePageHeadline = (newHeadline: string) => {
+    pageHeadline.value[selectedLang.value] = newHeadline;
+    localStorage.setItem("pageHeadline", JSON.stringify(pageHeadline.value));
   };
 
   const saveSectionHeadline = (
     newSectionHeadline: string,
     sectionNum: 1 | 2
   ) => {
-    langsData.value[selectedLang.value][`section-${sectionNum}`].headline =
-      newSectionHeadline;
-    localStorage.setItem("langsData", JSON.stringify(langsData.value));
+    if (sectionNum === 1) {
+      firstSectionHeadline.value[selectedLang.value] = newSectionHeadline;
+      localStorage.setItem(
+        "firstSectionHeadline",
+        JSON.stringify(firstSectionHeadline.value)
+      );
+    } else if (sectionNum === 2) {
+      secondSectionHeadline.value[selectedLang.value] = newSectionHeadline;
+      localStorage.setItem(
+        "secondSectionHeadline",
+        JSON.stringify(secondSectionHeadline.value)
+      );
+    }
   };
 
   const saveSectionText = (newSectionText: string, sectionNum: 1 | 2) => {
-    langsData.value[selectedLang.value][`section-${sectionNum}`].text =
-      newSectionText;
-    localStorage.setItem("langsData", JSON.stringify(langsData.value));
+    if (sectionNum === 1) {
+      firstSectionText.value[selectedLang.value] = newSectionText;
+      localStorage.setItem(
+        "firstSectionText",
+        JSON.stringify(firstSectionText.value)
+      );
+    } else if (sectionNum === 2) {
+      secondSectionText.value[selectedLang.value] = newSectionText;
+      localStorage.setItem(
+        "secondSectionText",
+        JSON.stringify(secondSectionText.value)
+      );
+    }
   };
 
   return {
-    setLangToState,
-    setLangsDataToState,
+    setLocalDataToState,
     saveLang,
-    saveHeadline,
+    savePageHeadline,
     saveSectionHeadline,
     saveSectionText,
   };
