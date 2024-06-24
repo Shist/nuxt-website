@@ -51,10 +51,7 @@
           @click="isImgNeeded = false"
         />
         <select v-model="selectedLang" name="language" id="lang-select">
-          <option value="EN">EN</option>
-          <option value="RU">RU</option>
-          <option value="DE">DE</option>
-          <option value="ZH">ZH</option>
+          <option v-for="lang in LANGUAGES" :value="lang">{{ lang }}</option>
         </select>
       </div>
     </header>
@@ -73,6 +70,7 @@ import {
 } from "@/locales";
 import useLocalStorage from "@/composables/useLocalStorage";
 import useLoadUser from "@/composables/useLoadUser";
+import { LANGUAGES } from "@/constants/langs";
 
 const isLoading = ref(true);
 
