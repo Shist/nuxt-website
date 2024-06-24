@@ -6,6 +6,7 @@ import {
   secondSectionHeadlineData,
   secondSectionTextData,
 } from "@/locales";
+import { LANGUAGES, LANGS_FIELDS } from "@/constants/langs";
 
 export default function useLocalStorage() {
   const selectedLang = useState<Language>("lang", () => "EN");
@@ -31,31 +32,31 @@ export default function useLocalStorage() {
   );
 
   const setLocalDataToState = () => {
-    [
-      "lang",
-      "pageHeadline",
-      "firstSectionHeadline",
-      "firstSectionText",
-      "secondSectionHeadline",
-      "secondSectionText",
-    ].forEach((field) => {
-      const fieldFromLocalStorage = localStorage.getItem(field);
+    const langFromLocalStorage = localStorage.getItem("lang");
+    if (langFromLocalStorage) {
+      const fieldState = useState<Language>("lang");
+      fieldState.value = langFromLocalStorage as Language;
+    }
 
-      if (fieldFromLocalStorage) {
-        const fieldState = useState<Language | TextDataField>(field);
+    LANGUAGES.forEach((lang) => {
+      LANGS_FIELDS.forEach((field) => {
+        const fieldFromLocalStorage = localStorage.getItem(`${lang}_${field}`);
 
-        fieldState.value = JSON.parse(fieldFromLocalStorage);
-      }
+        if (fieldFromLocalStorage) {
+          const fieldState = useState<TextDataField>(field);
+          fieldState.value[lang] = fieldFromLocalStorage;
+        }
+      });
     });
   };
 
   const saveLang = (newLang: string) => {
-    localStorage.setItem("lang", JSON.stringify(newLang));
+    localStorage.setItem("lang", newLang);
   };
 
   const savePageHeadline = (newHeadline: string) => {
     pageHeadline.value[selectedLang.value] = newHeadline;
-    localStorage.setItem("pageHeadline", JSON.stringify(pageHeadline.value));
+    localStorage.setItem(`${selectedLang.value}_pageHeadline`, newHeadline);
   };
 
   const saveSectionHeadline = (
@@ -65,14 +66,14 @@ export default function useLocalStorage() {
     if (sectionNum === 1) {
       firstSectionHeadline.value[selectedLang.value] = newSectionHeadline;
       localStorage.setItem(
-        "firstSectionHeadline",
-        JSON.stringify(firstSectionHeadline.value)
+        `${selectedLang.value}_firstSectionHeadline`,
+        newSectionHeadline
       );
     } else if (sectionNum === 2) {
       secondSectionHeadline.value[selectedLang.value] = newSectionHeadline;
       localStorage.setItem(
-        "secondSectionHeadline",
-        JSON.stringify(secondSectionHeadline.value)
+        `${selectedLang.value}_secondSectionHeadline`,
+        newSectionHeadline
       );
     }
   };
@@ -81,14 +82,14 @@ export default function useLocalStorage() {
     if (sectionNum === 1) {
       firstSectionText.value[selectedLang.value] = newSectionText;
       localStorage.setItem(
-        "firstSectionText",
-        JSON.stringify(firstSectionText.value)
+        `${selectedLang.value}_firstSectionText`,
+        newSectionText
       );
     } else if (sectionNum === 2) {
       secondSectionText.value[selectedLang.value] = newSectionText;
       localStorage.setItem(
-        "secondSectionText",
-        JSON.stringify(secondSectionText.value)
+        `${selectedLang.value}_secondSectionText`,
+        newSectionText
       );
     }
   };
